@@ -16,6 +16,7 @@ class BootstrapCompletions(sublime_plugin.EventListener):
         if(":" not in line):
           return self.class_completions
         else:
+          # handle this later
           # return self.value_completions
           return []
       else:
