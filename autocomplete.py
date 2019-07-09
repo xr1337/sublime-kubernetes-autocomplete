@@ -237,7 +237,7 @@ class KubernetesManifestCompletions(sublime_plugin.EventListener):
 
     def on_query_completions(self, view, prefix, locations):
         scope = view.scope_name(view.sel()[0].b).strip()
-        if scope in scopes:
+        if any(scope_name in scope for scope_name in scopes):
             line = view.substr(view.line(view.sel()[0]))
             if ":" not in line:
                 return self.class_completions + self.annotation_completions
