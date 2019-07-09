@@ -1,7 +1,12 @@
 import sublime_plugin
 import sublime
 
+# to which code scopes apply the code
+scopes = ["source.yaml"]
+
+# syntax keys
 key_list = [
+    "app",
     "active",
     "activeDeadlineSeconds",
     "addresses",
@@ -28,6 +33,8 @@ key_list = [
     "externalIPs",
     "externalName",
     "failedJobsHistoryLimit",
+    "fieldRef",
+    "fieldPath",
     "hostAliases",
     "hostIPC",
     "hostname",
@@ -51,6 +58,7 @@ key_list = [
     "loadBalancer",
     "loadBalancerIP",
     "matchLabels",
+    "minAvailable",
     "maxReplicas",
     "metadata",
     "metrics",
@@ -117,11 +125,31 @@ key_list = [
     "updatedReplicas",
     "updateStrategy",
     "value",
+    "valueFrom",
     "volumeDevices",
     "volumeMounts",
     "volumes",
     "workingDir",
+    "persistentVolumeClaimSpec",
+    "accessModes",
+    "resources",
+    "requests",
+    "storage",
+    "storageClassName",
+    "cpu",
+    "memory",
+    "affinity",
+    "requiredDuringSchedulingIgnoredDuringExecution",
+    "preferredDuringSchedulingIgnoredDuringExecution",
+    "labelSelector",
+    "matchExpressions",
+    "key",
+    "operator",
+    "values",
+    "topologyKey",
 ]
+
+# annotations completions
 annotation_list = [
     "alb.ingress.kubernetes.io/backend-protocol",
     "alb.ingress.kubernetes.io/certificate-arn",
@@ -166,7 +194,26 @@ annotation_list = [
     "service.beta.kubernetes.io/aws-load-balancer-type",
 ]
 
-value_list = ["Namespace", "LoadBalancer", "Pod", "Service", "ConfigMap"]
+value_list = [
+    "Always",
+    "ClusterRole",
+    "ClusterRoleBinding",
+    "ConfigMap",
+    "CronJob",
+    "DaemonSet",
+    "Deployment",
+    "IfNotPresent",
+    "Job",
+    "LoadBalancer",
+    "Namespace",
+    "Pod",
+    "PodDisruptionBudget",
+    "ReplicaSet",
+    "ReplicationController",
+    "Service",
+    "ServiceAccount",
+    "StatefulSet",
+]
 
 
 class KubernetesManifestCompletions(sublime_plugin.EventListener):
@@ -179,13 +226,9 @@ class KubernetesManifestCompletions(sublime_plugin.EventListener):
 
     def on_query_completions(self, view, prefix, locations):
         scope = view.scope_name(view.sel()[0].b).strip()
-        if scope == "source.yaml":
+        if scope in scopes:
             line = view.substr(view.line(view.sel()[0]))
             if ":" not in line:
                 return self.class_completions + self.annotation_completions
-            else:
-                # handle this later
-                # return self.value_completions
-                return []
-        else:
-            return []
+
+        return []
