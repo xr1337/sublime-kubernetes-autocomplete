@@ -76,6 +76,7 @@ key_list = [
     "minReplicas",
     "mountPath",
     "name",
+    "namespace",
     "nodeName",
     "nodeSelector",
     "numberAvailable",
